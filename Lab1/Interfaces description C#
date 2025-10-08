@@ -19,6 +19,8 @@ public Guid OrderId { get; set; } // PK
 public DateTime OrderDate { get; set; }
 public string Status { get; set; }
 public decimal TotalAmount { get; set; }
+public Guid customer_id { get; set; } // FK
+public Guid address_id { get; set; } // FK
 
 //Relationship
 public Guid CustomerId { get; set; } // FK
@@ -38,6 +40,7 @@ public string Street { get; set; }
 public string City { get; set; }
 public string PostalCode { get; set; }
 public string Country { get; set; }
+public Guid customer_id { get; set; } // FK
 
 //Relationship
 public ICollection<Order> Orders { get; set; } = new List<Order>();
@@ -50,6 +53,8 @@ public class OrderItem
 public Guid OrderItemId { get; set; } // PK
 public int Quantity { get; set; }
 public decimal UnitPrice { get; set; }
+public Guid order_id { get; set; } // FK
+public Guid product_id { get; set; } // FK
 
 //Foreign_Keys
 public Guid OrderId { get; set; }
@@ -66,6 +71,8 @@ public string Name { get; set; }
 public string Description { get; set; }
 public decimal Price { get; set; }
 public int StockQuantity { get; set; }
+public Guid category_id { get; set; } // FK
+public Guid supplier_id { get; set; } // FK
 
 //Foreign_Keys
 public Guid CategoryId { get; set; }
@@ -103,6 +110,7 @@ public Guid PaymentId { get; set; } // PK
 public decimal Amount { get; set; }
 public string Method { get; set; }
 public DateTime PaidAt { get; set; }
+public Guid order_id { get; set; } // FK
 
 //Foreign_Key
 public Guid OrderId { get; set; }
