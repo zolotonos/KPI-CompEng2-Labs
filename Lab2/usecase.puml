@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+
+' --- Актори ---
+actor "Registered customer" as Reg
+actor "Admin" as Admin
+
+' --- Зв'язки Registered customer ---
+Reg --> (Manage own account) as UC_ManageAccount
+Reg --> (login/logout) as UC_CustLogin
+Reg --> (Add to cart)
+Reg --> (remove from cart)
+Reg --> (Checkout) as UC_Checkout
+Reg --> (View products) as UC_CustView
+Reg --> (Search products) as UC_CustSearch
+
+' --- Зв'язки Admin ---
+Admin --> (login/logout) as UC_AdminLogin
+Admin --> (Manage products) as UC_ManageProducts
+Admin --> (notify user) as UC_Notify
+Admin --> (Manage user account) as UC_ManageUsers
+Admin --> (View products) as UC_AdminView
+Admin --> (Search products) as UC_AdminSearch
+Admin --> (Block user/change user info) as UC_BlockUser
+
+' --- Залежності Customer ---
+(UC_ManageAccount) ..> (UC_CustLogin) : uses
+(UC_Checkout) ..> (UC_CustLogin) : uses
+(UC_CustView) <-- (UC_CustSearch) : extends
+
+' --- Залежності Admin ---
+(UC_ManageProducts) ..> (UC_AdminLogin) : uses
+(UC_Notify) ..> (UC_AdminLogin) : uses
+(UC_ManageUsers) ..> (UC_AdminLogin) : uses
+
+(UC_ManageUsers) <-- (UC_BlockUser) : extends
+(UC_AdminView) <-- (UC_ManageProducts) : extends
+(UC_AdminView) <-- (UC_AdminSearch) : extends
+
+@enduml
