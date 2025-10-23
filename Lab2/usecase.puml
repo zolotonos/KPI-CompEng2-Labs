@@ -1,11 +1,11 @@
 @startuml
 left to right direction
 
-' --- Актори ---
+'Актори
 actor "Registered customer" as Reg
 actor "Admin" as Admin
 
-' --- Зв'язки Registered customer ---
+' Зв'язки Registered customer
 Reg --> (Manage own account) as UC_ManageAccount
 Reg --> (login/logout) as UC_CustLogin
 Reg --> (Add to cart)
@@ -14,7 +14,7 @@ Reg --> (Checkout) as UC_Checkout
 Reg --> (View products) as UC_CustView
 Reg --> (Search products) as UC_CustSearch
 
-' --- Зв'язки Admin ---
+' Зв'язки Admin 
 Admin --> (login/logout) as UC_AdminLogin
 Admin --> (Manage products) as UC_ManageProducts
 Admin --> (notify user) as UC_Notify
@@ -23,12 +23,12 @@ Admin --> (View products) as UC_AdminView
 Admin --> (Search products) as UC_AdminSearch
 Admin --> (Block user/change user info) as UC_BlockUser
 
-' --- Залежності Customer ---
+'Залежності Customer
 (UC_ManageAccount) ..> (UC_CustLogin) : uses
 (UC_Checkout) ..> (UC_CustLogin) : uses
 (UC_CustView) <-- (UC_CustSearch) : extends
 
-' --- Залежності Admin ---
+'  Залежності Admin 
 (UC_ManageProducts) ..> (UC_AdminLogin) : uses
 (UC_Notify) ..> (UC_AdminLogin) : uses
 (UC_ManageUsers) ..> (UC_AdminLogin) : uses
