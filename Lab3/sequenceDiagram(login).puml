@@ -1,0 +1,35 @@
+@startuml "sequenceDiagram(login)"
+
+
+'participants
+actor "Registered Customer" as Customer
+participant "E-commerce Website" as App
+participant "System (Backend)" as Server
+
+'start "Login"
+
+Customer -> App: 1. enterCredentials(email, password)
+App -> Server: 2. login(email, password)
+activate Server
+
+' 'alt' - check block
+alt Credentials Valid
+    
+    ' 3a. server checks data 
+    ' creates session
+    Server -> Server: 3a. validateAndCreateSession()
+    
+    ' 4a. return (first_name)
+    Server --> App: 4a. loginSuccess(token, {first_name})
+    
+    ' 5a. greetings(succesfull login)
+    App --> Customer: 5a. showDashboard("Вітаємо, {first_name}!")
+
+else Credentials Invalid
+    ' 3b. Error
+    Server --> App: 3b. loginFailed("Invalid email or password")
+    App --> Customer: 4b. showErrorMessage()
+end
+
+deactivate Server
+@enduml
