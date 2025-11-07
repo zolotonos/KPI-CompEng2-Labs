@@ -1,40 +1,57 @@
-@startuml
-left to right direction
+@startuml "usecase(e-commerce website for tech)"
 
-'Актори
-actor "Registered customer" as Reg
+
+actor "Registered customer" as Registered
+actor "not registered customer" as NotRegistered
 actor "Admin" as Admin
 
-' Зв'язки Registered customer
-Reg --> (Manage own account) as UC_ManageAccount
-Reg --> (login/logout) as UC_CustLogin
-Reg --> (Add to cart)
-Reg --> (remove from cart)
-Reg --> (Checkout) as UC_Checkout
-Reg --> (View products) as UC_CustView
-Reg --> (Search products) as UC_CustSearch
 
-' Зв'язки Admin 
-Admin --> (login/logout) as UC_AdminLogin
-Admin --> (Manage products) as UC_ManageProducts
-Admin --> (notify user) as UC_Notify
-Admin --> (Manage user account) as UC_ManageUsers
-Admin --> (View products) as UC_AdminView
-Admin --> (Search products) as UC_AdminSearch
-Admin --> (Block user/change user info) as UC_BlockUser
+rectangle "e-commerce website for tech" {
+  
+  
+  usecase "Manage own account" as UC1
+  usecase "login/logout" as UC2
+  usecase "Add to cart" as UC3
+  usecase "remove from cart" as UC4
+  usecase "Checkout" as UC5
+  usecase "View products" as UC6
+  usecase "Search products" as UC7
+  usecase "Manage products" as UC8
+  usecase "notify user" as UC9
+  usecase "Manage user account" as UC10
+  usecase "Block user/Change user info" as UC11
+  
+  ' Зв'язки <<include>> та <<extend>>
+  UC1 ..> UC2 : <<include>>
+  UC3 ..> UC2 : <<include>>
+  UC5 ..> UC2 : <<include>>
 
-'Залежності Customer
-(UC_ManageAccount) ..> (UC_CustLogin) : uses
-(UC_Checkout) ..> (UC_CustLogin) : uses
-(UC_CustView) <-- (UC_CustSearch) : extends
+  UC3 ..> UC8 : <<include>>
+  UC5 ..> UC8 : <<include>>
+  
+  UC7 ..> UC6 : <<extend>>
+  UC11 ..> UC10 : <<extend>>
+}
 
-'  Залежності Admin 
-(UC_ManageProducts) ..> (UC_AdminLogin) : uses
-(UC_Notify) ..> (UC_AdminLogin) : uses
-(UC_ManageUsers) ..> (UC_AdminLogin) : uses
+' Зв'язки акторів (Клієнти) - сині
+Registered --> UC1
+Registered --> UC2
+Registered --> UC3
+Registered --> UC4
+Registered --> UC5
+Registered --> UC6
+Registered --> UC7
 
-(UC_ManageUsers) <-- (UC_BlockUser) : extends
-(UC_AdminView) <-- (UC_ManageProducts) : extends
-(UC_AdminView) <-- (UC_AdminSearch) : extends
+
+' Зв'язки акторів (Адмін) - червоні
+Admin --> UC2
+Admin --> UC6
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC7
+
+
+NotRegistered ..> Registered : <<extend>>
 
 @enduml
