@@ -7,16 +7,16 @@ sequenceDiagram
     C->>UI: addAddress(customer_id, street, city, postal_code)
     activate UI
 
-    Note right of UI: Валідація вхідних даних
+    Note right of UI: Валідація поштового індексу
 
-    opt Postal Code is Invalid
+    alt Postal Code is Invalid
         UI-->>C: Error: "Invalid Postal Code format"
+    else Postal Code is Valid
+        UI->>A_DB: saveAddress(customer_id, street, city, postal_code, country)
+        activate A_DB
+        A_DB-->>UI: address_id
+        deactivate A_DB
+
+        UI-->>C: return Success(address_id)
     end
-
-    UI->>A_DB: saveAddress(customer_id, street, city, postal_code, country)
-    activate A_DB
-    A_DB-->>UI: address_id
-    deactivate A_DB
-
-    UI-->>C: return Success(address_id)
     deactivate UI
