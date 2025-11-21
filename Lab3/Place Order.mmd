@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor C as Customer
+    participant API as OrderService
+    participant P_DB as Product (DB)
+    participant O_DB as Order (DB)
+
+    Note over C, API: Користувач надсилає список товарів для покупки
+
+    C->>API: submitOrder(customerId, itemsList)
+    activate API
+
+    loop For each Item
+        API->>P_DB: getStock(productId)
+        activate P_DB
+        P_DB-->>API: stock_quantity, price
+        deactivate P_DB
+
+        alt Stock < Quantity
+            API-->>C: Error: "Not enough stock"
+        else Stock >= Quantity
+            Note right of API: Товар доступний
+        end
+    end
+
+    Note right of API: Усі перевірки пройдено
+
+    API->>O_DB: createOrder(customerId, totalAmount, status="NEW")
+    activate O_DB
+    O_DB-->>API: order_id
+    deactivate O_DB
+
+    loop For each Item
+        API->>O_DB: createOrderItem(order_id, productId, quantity, price)
+        API->>P_DB: decreaseStock(productId, quantity)
+    end
+
+    API-->>C: return OrderSuccess(order_id)
+    deactivate API
