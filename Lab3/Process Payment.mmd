@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor C as Customer
+    participant PS as PaymentService
+    participant O_DB as Order (DB)
+    participant PAY_DB as Payment (DB)
+
+    C->>PS: initiatePayment(order_id, amount, method)
+    activate PS
+
+    PS->>O_DB: getOrderDetails(order_id)
+    activate O_DB
+    O_DB-->>PS: total_amount, status
+    deactivate O_DB
+
+    alt Status is already "PAID"
+        PS-->>C: Error: "Order already paid"
+    else Amount matches Total
+        Note right of PS: Перевірка успішна
+        
+        PS->>PAY_DB: createPayment(order_id, amount, method, paid_at=Now)
+        activate PAY_DB
+        PAY_DB-->>PS: payment_id
+        deactivate PAY_DB
+
+        PS->>O_DB: updateOrderStatus(order_id, status="PAID")
+        activate O_DB
+        O_DB-->>PS: Success
+        deactivate O_DB
+
+        PS-->>C: PaymentConfimation(payment_id)
+    else Amount mismatch
+        PS-->>C: Error: "Invalid Amount"
+    end
+    deactivate PS
