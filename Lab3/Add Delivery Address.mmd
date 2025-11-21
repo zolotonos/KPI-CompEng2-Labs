@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    actor C as Customer
+    participant UI as ProfileService
+    participant A_DB as Address (DB)
+
+    C->>UI: addAddress(customer_id, street, city, postal_code)
+    activate UI
+
+    Note right of UI: Валідація вхідних даних
+
+    opt Postal Code is Invalid
+        UI-->>C: Error: "Invalid Postal Code format"
+    end
+
+    UI->>A_DB: saveAddress(customer_id, street, city, postal_code, country)
+    activate A_DB
+    A_DB-->>UI: address_id
+    deactivate A_DB
+
+    UI-->>C: return Success(address_id)
+    deactivate UI
